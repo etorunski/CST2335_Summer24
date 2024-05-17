@@ -33,7 +33,23 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   var isChecked = false;
+  late TextEditingController _controller; // late means initialize later, but not null
+  late TextEditingController _controller2;
 
+  @override
+  void initState() {
+    // initialize object, onloaded in HTML
+    super.initState();
+    _controller = TextEditingController();
+    _controller2 = TextEditingController();
+  }
+
+  @override
+  void dispose() { //unloading the page
+    super.dispose();
+    _controller.dispose(); //delete memory of _controller
+    _controller2.dispose();
+  }
 
 
   void _incrementCounter() {
@@ -59,10 +75,20 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
 
             ElevatedButton(
-                onPressed: (){ },
+                onPressed: (){
+                  var myText = _controller.value.text;
+
+                  _controller.text = "You typed:"+ myText;
+                },
                 child:  Image.asset("images/algonquin.jpg", height:100.0, width:100.0)  ),
             Checkbox(value: isChecked, onChanged:changeCheckbox),
-            Switch(value: isChecked, onChanged:changeCheckbox)
+            Switch(value: isChecked, onChanged:changeCheckbox),
+            TextField( controller:_controller,
+            decoration:  InputDecoration(
+                hintText:"Type here",
+                border: OutlineInputBorder(),
+                labelText: "First name"
+            ),)
           ],
         ),
       ),
