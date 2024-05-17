@@ -61,15 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
                 onPressed: (){ },
                 child:  Image.asset("images/algonquin.jpg", height:100.0, width:100.0)  ),
-            Checkbox(value: isChecked,
-                onChanged:
-                  (bool ? ch) {
-                    if(ch != null) {
-                      setState(() {
-                        isChecked = ch;
-                      });
-                    }
-            })
+            Checkbox(value: isChecked, onChanged:changeCheckbox),
+            Switch(value: isChecked, onChanged:changeCheckbox)
           ],
         ),
       ),
@@ -81,8 +74,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-void hoverFunction(bool b){
-
+void changeCheckbox(bool ? ch) {
+  if (ch != null) {
+    setState(() {
+      isChecked = ch;
+    });
+  }
 }
   void buttonClicked(){
 
