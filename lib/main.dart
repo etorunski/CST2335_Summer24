@@ -32,6 +32,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  var isChecked = false;
+
+
 
   void _incrementCounter() {
     setState(() {
@@ -57,7 +60,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
             ElevatedButton(
                 onPressed: (){ },
-                child:  Image.asset("images/algonquin.jpg", height:100.0, width:100.0)  )
+                child:  Image.asset("images/algonquin.jpg", height:100.0, width:100.0)  ),
+            Checkbox(value: isChecked,
+                onChanged:
+                  (bool ? ch) {
+                    if(ch != null) {
+                      setState(() {
+                        isChecked = ch;
+                      });
+                    }
+            })
           ],
         ),
       ),
