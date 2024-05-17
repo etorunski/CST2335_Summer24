@@ -52,8 +52,12 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             const Text(
               'You have pushed the button this many times:',
+              style: TextStyle(fontSize:20.0),
             ),
-            Image.asset("images/algonquin.jpg", height:500.0, width:500.0)
+
+            ElevatedButton(
+                onPressed: (){ },
+                child:  Image.asset("images/algonquin.jpg", height:100.0, width:100.0)  )
           ],
         ),
       ),
@@ -63,5 +67,12 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+void hoverFunction(bool b){
+
+}
+  void buttonClicked(){
+
   }
 }
