@@ -10,8 +10,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp(   // Constructor for MaterialApp
+
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -61,12 +63,46 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+      drawer: Drawer( child:
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [ Text("More items:"),
+        Text("More items 2:"),
+        Text("More items 3:"),
+        Text("More items 4:"),
+        Text("More items 5:"),
+        Text("More items 6:"),
+      ],)
       ),
+      appBar: AppBar(
+        backgroundColor: Colors.lightGreen,
+        title: Text("My app is great!"),
+
+        actions: [
+          ElevatedButton(onPressed: (){   }, child: Text("Delete")) ,
+        SizedBox(width:350, height:50),
+        ElevatedButton(onPressed: (){}, child: Image.asset("images/algonquin.jpg", height:50, width: 50,),),
+
+          ElevatedButton(onPressed: (){   }, child: Text("Delete 2")) ,
+          ElevatedButton(onPressed: (){   }, child: Text("Delete")) ,
+        ],
+      ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (whichItem) {
+          var selected = whichItem;
+
+        },
+        items: [
+        BottomNavigationBarItem(icon: Icon( Icons.add_circle ) , label:"Add"  ),
+        BottomNavigationBarItem(icon: Icon( Icons.add_card ), label:"Pay now"   ),
+        BottomNavigationBarItem(icon: Icon( Icons.add_a_photo ), label:"Take picture"   ),
+
+
+      ],  ),
+
       body: Center(
-        child: Column(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             ElevatedButton(onPressed: () { }, child:Text("Button 1")),
@@ -78,11 +114,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      /*floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),*/ // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
