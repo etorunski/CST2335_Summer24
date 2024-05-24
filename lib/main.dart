@@ -88,28 +88,25 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
 
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (whichItem) {
-          var selected = whichItem;
-
-        },
-        items: [
-        BottomNavigationBarItem(icon: Icon( Icons.add_circle ) , label:"Add"  ),
-        BottomNavigationBarItem(icon: Icon( Icons.add_card ), label:"Pay now"   ),
-        BottomNavigationBarItem(icon: Icon( Icons.add_a_photo ), label:"Take picture"   ),
-
-
-      ],  ),
-
       body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            ElevatedButton(onPressed: () { }, child:Text("Button 1")),
-            ElevatedButton(onPressed: () { }, child:Text("Button 2")),
-            ElevatedButton(onPressed: () { }, child:Text("Button 3")),
-            ElevatedButton(onPressed: () { }, child:Text("Button 4")),
-            Image.asset("images/algonquin.jpg", width: 100, height:100)
+          Text("One pan skillet cookie", style: TextStyle(fontSize: 50.0, color: Colors.orange),),
+          Text("INGREDIENT LIST"),
+            SizedBox(height:50),
+            Row( mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.star),
+              Text("1 STICK UNSALTED BUTTER")
+            ],),
+
+            Row( mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.star),
+                Text("1/2 CUP GRANULATED SUGAR")
+              ],),
 
           ],
         ),
