@@ -69,26 +69,12 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-              style: TextStyle(fontSize:20.0),
-            ),
+            ElevatedButton(onPressed: () { }, child:Text("Button 1")),
+            ElevatedButton(onPressed: () { }, child:Text("Button 2")),
+            ElevatedButton(onPressed: () { }, child:Text("Button 3")),
+            ElevatedButton(onPressed: () { }, child:Text("Button 4")),
+            Image.asset("images/algonquin.jpg", width: 100, height:100)
 
-            ElevatedButton(
-                onPressed: (){
-                  var myText = _controller.value.text;
-
-                  _controller.text = "You typed:"+ myText;
-                },
-                child:  Image.asset("images/algonquin.jpg", height:100.0, width:100.0)  ),
-            Checkbox(value: isChecked, onChanged:changeCheckbox),
-            Switch(value: isChecked, onChanged:changeCheckbox),
-            TextField( controller:_controller,
-            decoration:  InputDecoration(
-                hintText:"Type here",
-                border: OutlineInputBorder(),
-                labelText: "First name"
-            ),)
           ],
         ),
       ),
