@@ -61,53 +61,23 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary,title: Text(widget.title)),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-              style: TextStyle(fontSize:20.0),
-            ),
-
-            ElevatedButton(
-                onPressed: (){
-                  var myText = _controller.value.text;
-
-                  _controller.text = "You typed:"+ myText;
-                },
-                child:  Image.asset("images/algonquin.jpg", height:100.0, width:100.0)  ),
-            Checkbox(value: isChecked, onChanged:changeCheckbox),
-            Switch(value: isChecked, onChanged:changeCheckbox),
-            TextField( controller:_controller,
-            decoration:  InputDecoration(
-                hintText:"Type here",
-                border: OutlineInputBorder(),
-                labelText: "First name"
-            ),)
+            const Text('Click on the button below:', style: TextStyle(fontSize:20.0), ),
+            ElevatedButton( onPressed:buttonClicked, child:  Text("Click here")  )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
-void changeCheckbox(bool ? ch) {
-  if (ch != null) {
-    setState(() {
-      isChecked = ch;
-    });
-  }
-}
+  //This function gets run when you click the button
   void buttonClicked(){
 
   }
+
+
 }
