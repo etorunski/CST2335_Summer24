@@ -1,4 +1,7 @@
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var isChecked = false;
   late TextEditingController _controller; // late means initialize later, but not null
   late TextEditingController _controller2;
+  late EncryptedSharedPreferences savedData;
 
   @override
   void initState() {
@@ -42,6 +46,16 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _controller = TextEditingController();
     _controller2 = TextEditingController();
+
+    //load the file for SharedPreferences, and pass it in when finished
+
+
+    savedData = EncryptedSharedPreferences(); //constructor is not asynchronous
+    savedData.getString("VariableName").then( (unencryptedString)  {
+      if(unencryptedString != null){
+        _controller.text = unencryptedString;
+      }
+    });
   }
 
   @override
@@ -52,12 +66,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +75,15 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text('Click on the button below:', style: TextStyle(fontSize:20.0), ),
-            ElevatedButton( onPressed:buttonClicked, child:  Text("Click here")  )
+            ElevatedButton( onPressed:buttonClicked, child:  Text("Click here")  ),
+
+            TextField(controller: _controller,
+                decoration: InputDecoration(
+                    hintText:"Type here",
+                    border: OutlineInputBorder(),
+                    labelText: "Login name:"
+                )),
+
           ],
         ),
       ),
@@ -80,12 +96,18 @@ class _MyHomePageState extends State<MyHomePage> {
     showDialog<String>(
       context: context,
         builder:(BuildContext ctx )=> AlertDialog(
-          title: const Text('This is my title'),
-          content: const Text('You have a nice alert dialog'),
+          title: const Text('Save data'),
+          content: const Text('Do you want to save your login?'),
           actions: <Widget>[
-            ElevatedButton(child: Text("Ok"),      onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: Text('Yay! A SnackBar!') ) ); }
+            ElevatedButton(child: Text("Ok"),
+              onPressed: () {
+
+                var userTyped = _controller.value.text;//
+
+                //savedData is EncryptedSharedPreferences
+                savedData.setString("VariableName", userTyped);//variable name
+                Navigator.pop(context);
+              }
               ,),
             FilledButton(  child: Text("Cancel"),  onPressed: () {  }, ),
             OutlinedButton(child: Text("Delete"),      onPressed: () {  },)
