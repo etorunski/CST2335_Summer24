@@ -77,6 +77,22 @@ class _MyHomePageState extends State<MyHomePage> {
   //This function gets run when you click the button
   void buttonClicked(){
 
+    showDialog<String>(
+      context: context,
+        builder:(BuildContext ctx )=> AlertDialog(
+          title: const Text('This is my title'),
+          content: const Text('You have a nice alert dialog'),
+          actions: <Widget>[
+            ElevatedButton(child: Text("Ok"),      onPressed: () {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: Text('Yay! A SnackBar!') ) ); }
+              ,),
+            FilledButton(  child: Text("Cancel"),  onPressed: () {  }, ),
+            OutlinedButton(child: Text("Delete"),      onPressed: () {  },)
+
+          ],
+        ),
+    );
   }
 
 
