@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,107 +9,149 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'Login Page',
+      home: const LoginPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  var isChecked = false;
-  late TextEditingController _controller; // late means initialize later, but not null
-  late TextEditingController _controller2;
+class _LoginPageState extends State<LoginPage> {
+  final _loginController = TextEditingController();
+  final _passwordController = TextEditingController();
+  String _imageSource = 'images/question-mark.png';
+  final _secureStorage = const FlutterSecureStorage();
 
   @override
   void initState() {
-    // initialize object, onloaded in HTML
     super.initState();
-    _controller = TextEditingController();
-    _controller2 = TextEditingController();
+    _loadCredentials();
   }
 
-  @override
-  void dispose() { //unloading the page
-    super.dispose();
-    _controller.dispose(); //delete memory of _controller
-    _controller2.dispose();
+  Future<void> _loadCredentials() async {
+    final prefs = await SharedPreferences.getInstance();
+    final hasCredentials = prefs.getBool('hasCredentials') ?? false;
+
+    if (hasCredentials) {
+      final username = await _secureStorage.read(key: 'username');
+      final password = await _secureStorage.read(key: 'password');
+
+      if (username != null && password != null) {
+        _loginController.text = username;
+        _passwordController.text = password;
+
+        final snackBar = SnackBar(
+          content: const Text('Previous login credentials loaded.'),
+          action: SnackBarAction(
+            label: 'Clear Saved Data',
+            onPressed: () {
+              _loginController.clear();
+              _passwordController.clear();
+              _secureStorage.delete(key: 'username');
+              _secureStorage.delete(key: 'password');
+              prefs.setBool('hasCredentials', false);
+            },
+          ),
+          duration: const Duration(seconds: 1000),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    }
   }
 
+  Future<void> _handleLogin() async {
+    final password = _passwordController.text;
+    if (password == 'QWERTY123') {
+      setState(() {
+        _imageSource = 'images/idea.png';
+      });
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Save Login Credentials'),
+          content: const Text('Would you like to save your username and password for next time?'),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setBool('hasCredentials', false);
+                await _secureStorage.delete(key: 'username');
+                await _secureStorage.delete(key: 'password');
+                Navigator.of(context).pop();
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setBool('hasCredentials', true);
+
+                final username = _loginController.text;
+                await _secureStorage.write(key: 'username', value: username);
+                await _secureStorage.write(key: 'password', value: password);
+                Navigator.of(context).pop();
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      setState(() {
+        _imageSource = 'images/stop.png';
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: const Text('Login Page'),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-              style: TextStyle(fontSize:20.0),
+          children: [
+            TextField(
+              controller: _loginController,
+              decoration: const InputDecoration(
+                labelText: 'Login name',
+              ),
             ),
-
+            const SizedBox(height: 16.0),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Password',
+              ),
+            ),
+            const SizedBox(height: 16.0),
             ElevatedButton(
-                onPressed: (){
-                  var myText = _controller.value.text;
-
-                  _controller.text = "You typed:"+ myText;
-                },
-                child:  Image.asset("images/algonquin.jpg", height:100.0, width:100.0)  ),
-            Checkbox(value: isChecked, onChanged:changeCheckbox),
-            Switch(value: isChecked, onChanged:changeCheckbox),
-            TextField( controller:_controller,
-            decoration:  InputDecoration(
-                hintText:"Type here",
-                border: OutlineInputBorder(),
-                labelText: "First name"
-            ),)
+              onPressed: _handleLogin,
+              child: const Text('Login'),
+            ),
+            const SizedBox(height: 16.0),
+            Image.asset(
+              _imageSource,
+              width: 300,
+              height: 300,
+            ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
-  }
-
-void changeCheckbox(bool ? ch) {
-  if (ch != null) {
-    setState(() {
-      isChecked = ch;
-    });
-  }
-}
-  void buttonClicked(){
-
   }
 }
