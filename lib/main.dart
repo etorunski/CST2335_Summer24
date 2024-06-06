@@ -67,7 +67,14 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text('Click on the button below:', style: TextStyle(fontSize:20.0), ),
-            ElevatedButton( onPressed:buttonClicked, child:  Text("Click here")  )
+            ElevatedButton( onPressed:buttonClicked, child:  Text("Click here")  ),
+            Padding(padding: EdgeInsets.fromLTRB(10, 10, 10, 10), child:
+            TextField(controller: _controller,
+                decoration: InputDecoration(
+                    hintText:"Type here",
+                    border: OutlineInputBorder(),
+                    labelText: "First name"
+                ))),
           ],
         ),
       ),
