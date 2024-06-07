@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'OtherPage.dart';
+import 'DataRepository.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +14,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      //list all the pages:
+      routes: {
+        //Keys:         //values
+        '/pageOne'   :   (context) => MyHomePage(title: 'Flutter Demo Home Page'),
+        '/pageTwo'  :    (context) { return OtherPage(); }
+
+      },
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute : '/pageOne'  ,
     );
   }
 }
@@ -42,6 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _controller = TextEditingController();
     _controller2 = TextEditingController();
+
+    DataRepository.loadData();
   }
 
   @override
@@ -49,6 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
     _controller.dispose(); //delete memory of _controller
     _controller2.dispose();
+    //save DataRepository
+    DataRepository.saveData();
   }
 
 
@@ -68,13 +82,14 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             const Text('Click on the button below:', style: TextStyle(fontSize:20.0), ),
             ElevatedButton( onPressed:buttonClicked, child:  Text("Click here")  ),
-            Padding(padding: EdgeInsets.fromLTRB(10, 10, 10, 10), child:
-            TextField(controller: _controller,
+            Row(children:[
+            Flexible(child:TextField(controller: _controller,
                 decoration: InputDecoration(
                     hintText:"Type here",
                     border: OutlineInputBorder(),
                     labelText: "First name"
-                ))),
+                )))//this will have size for hit-testing
+            ]),
           ],
         ),
       ),
@@ -83,6 +98,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //This function gets run when you click the button
   void buttonClicked(){
+
+    DataRepository.firstName  = _controller.value.text;
+    Navigator.pushNamed(context, '/pageTwo'); //'/pageTwo' is one of your routes above
 
   }
 
